@@ -1,0 +1,28 @@
+graph          root/source       algorithm                          superstep
+
+rmat           247718            sssp origin-rolling                53
+rmat           736048            sssp origin-rolling                47
+
+rand           99880             sssp origin-rolling                35
+rand           113275            sssp origin-rolling                40
+
+wikitalk       2379175           sssp origin-rolling                28
+wikitalk       1729396           sssp origin-rolling                34
+
+roadnetca      1787167           sssp origin-rolling                709
+roadnetca      1743656           sssp origin-rolling                678
+
+rmat           247718            bfs  origin-rolling                9
+rmat           736048            bfs  origin-rolling                9
+
+rand           99880             bfs  origin-rolling                9
+rand           113275            bfs  origin-rolling                9
+
+wikitalk       2379175           bfs  origin-rolling                8
+wikitalk       1729396           bfs  origin-rolling                8
+
+roadnetca      1787167           bfs  origin-rolling                581
+roadnetca      1743656           bfs  origin-rolling                612
+
+bip            -                 bip  origin-rolling                22
+

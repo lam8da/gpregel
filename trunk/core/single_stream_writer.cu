@@ -60,52 +60,37 @@ void SingleStreamWriter::SingleThreadedResultHandler(
   static HostOutEdgeContent out_econ;
 
   static bool host_data_initialized = false;
-  static AutoMutex init_host_data_mutex;
 
   static unsigned int vcon_copied_size = 0;
   static unsigned int econ_copied_size = 0;
   static AutoMutex copy_mutex;
 
-  static bool wrote = false;
-
+  copy_mutex.Lock();
   if (!host_data_initialized) {
-    init_host_data_mutex.Lock();
-    if (!host_data_initialized) {
-      out_vcon.Allocate(global->d_num_vertex);
-      out_econ.Allocate(global->d_num_edge);
-      host_data_initialized = true;
-    }
-    init_host_data_mutex.Unlock();
+    out_vcon.Allocate(global->d_num_vertex);
+    out_econ.Allocate(global->d_num_edge);
+    host_data_initialized = true;
   }
 
-  copy_mutex.Lock();
-  if (wrote) {
-    if (vcon->d_size > 0 || econ->d_size > 0) {
-      cout << "SingleStreamWriter::WriteOutput error: "
-           << "result already been wrote but device still contains data! "
-           << "vcon->d_size: " << vcon->d_size
-           << "econ->d_size: " << econ->d_size
-           << endl;
-      exit(1);
-    }
-  } else {
-    if (vcon->d_size > 0) {
-      out_vcon.CopyFromDevice(*vcon, 0, vcon->d_size);
-      vcon_copied_size += vcon->d_size;
-    }
-    if (econ->d_size > 0) {
-      out_econ.CopyFromDevice(*econ, 0, econ->d_size);
-      econ_copied_size += econ->d_size;
-    }
+  if (vcon->d_size > 0) {
+    out_vcon.CopyFromDevice(*vcon, 0, vcon->d_size);
+    vcon_copied_size += vcon->d_size;
+  }
+  if (econ->d_size > 0) {
+    out_econ.CopyFromDevice(*econ, 0, econ->d_size);
+    econ_copied_size += econ->d_size;
+  }
 
-    if (vcon_copied_size == global->d_num_vertex &&
-        econ_copied_size == global->d_num_edge) {
-      (*Handler)(&out_vcon, &out_econ, out);
+  if (vcon_copied_size == global->d_num_vertex &&
+      econ_copied_size == global->d_num_edge) {
+    (*Handler)(&out_vcon, &out_econ, out);
 
-      out_vcon.Deallocate();
-      out_econ.Deallocate();
-      wrote = true;
-    }
+    out_vcon.Deallocate();
+    out_econ.Deallocate();
+
+    host_data_initialized = false;
+    vcon_copied_size = 0;
+    econ_copied_size = 0;
   }
   copy_mutex.Unlock();
 }

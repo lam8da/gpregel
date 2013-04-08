@@ -42,9 +42,7 @@ struct HostInVertexContent {
   unsigned int *in_edge_count;
   unsigned int *out_edge_count;
   //// TODO(laigd): add user defined 'in' members
-#ifndef LAMBDA_TEST_SHORTEST_PATH
 $$V_IN[[<GP_TYPE> *<GP_NAME>;]]
-#endif
 
   // Only allocate 'in' members
   void Allocate(const unsigned int size) {
@@ -52,9 +50,7 @@ $$V_IN[[<GP_TYPE> *<GP_NAME>;]]
     ALLOCATE_IN_MEMBERS(unsigned int, in_edge_count, size);
     ALLOCATE_IN_MEMBERS(unsigned int, out_edge_count, size);
     //// TODO(laigd): add user defined 'in' members
-#ifndef LAMBDA_TEST_SHORTEST_PATH
 $$V_IN[[ALLOCATE_IN_MEMBERS(<GP_TYPE>, <GP_NAME>, size);]]
-#endif
   }
 
   // Only deallocate 'in' members
@@ -63,9 +59,7 @@ $$V_IN[[ALLOCATE_IN_MEMBERS(<GP_TYPE>, <GP_NAME>, size);]]
     DEALLOCATE_ON_HOST(in_edge_count);
     DEALLOCATE_ON_HOST(out_edge_count);
     //// TODO(laigd): add user defined 'in' members
-#ifndef LAMBDA_TEST_SHORTEST_PATH
 $$V_IN[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
-#endif
   }
 
   // Need to be synchronized.
@@ -77,9 +71,7 @@ $$V_IN[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
     COPY_FROM_HOST_TO_DEVICE(in_edge_count,  dest, device_offset, size, unsigned int);
     COPY_FROM_HOST_TO_DEVICE(out_edge_count, dest, device_offset, size, unsigned int);
     //// TODO(laigd): add user defined 'in' members
-#ifndef LAMBDA_TEST_SHORTEST_PATH
 $$V_IN[[COPY_FROM_HOST_TO_DEVICE(<GP_NAME>, dest, device_offset, size, <GP_TYPE>);]]
-#endif
   }
 
   // Used to get input.
@@ -88,44 +80,30 @@ $$V_IN[[COPY_FROM_HOST_TO_DEVICE(<GP_NAME>, dest, device_offset, size, <GP_TYPE>
     in_edge_count[index] = v.in_edge_count;
     out_edge_count[index] = v.out_edge_count;
     //// TODO(laigd): add user defined 'in' members
-#ifndef LAMBDA_TEST_SHORTEST_PATH
 $$V_IN[[<GP_NAME>[index] = v.<GP_NAME>;]]
-#endif
   }
 };
 
 struct HostInEdgeContent {
   unsigned int *from;
   unsigned int *to;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined 'in' members
-  unsigned int *weight;
-#else
 $$E_IN[[<GP_TYPE> *<GP_NAME>;]]
-#endif
 
   // Only allocate 'in' members
   void Allocate(const unsigned int size) {
     ALLOCATE_IN_MEMBERS(unsigned int, from, size);
     ALLOCATE_IN_MEMBERS(unsigned int, to, size);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'in' members
-    ALLOCATE_IN_MEMBERS(unsigned int, weight, size);
-#else
 $$E_IN[[ALLOCATE_IN_MEMBERS(<GP_TYPE>, <GP_NAME>, size);]]
-#endif
   }
 
   // Only deallocate 'in' members
   void Deallocate() {
     DEALLOCATE_ON_HOST(from);
     DEALLOCATE_ON_HOST(to);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'in' members
-    DEALLOCATE_ON_HOST(weight);
-#else
 $$E_IN[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
-#endif
   }
 
   void CopyToDevice(
@@ -134,23 +112,15 @@ $$E_IN[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
       EdgeContent *dest) {  // device memory
     COPY_FROM_HOST_TO_DEVICE(from, dest, device_offset, size, unsigned int);
     COPY_FROM_HOST_TO_DEVICE(to,   dest, device_offset, size, unsigned int);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'in' members
-    COPY_FROM_HOST_TO_DEVICE(weight, dest, device_offset, size, unsigned int);
-#else
 $$E_IN[[COPY_FROM_HOST_TO_DEVICE(<GP_NAME>, dest, device_offset, size, <GP_TYPE>);]]
-#endif
   }
 
   void Set(const unsigned int index, const IoEdge &e) {
     from[index] = e.from;
     to[index] = e.to;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'in' members
-    weight[index] = e.weight;
-#else
 $$E_IN[[<GP_NAME>[index] = e.<GP_NAME>;]]
-#endif
   }
 };
 

@@ -8,6 +8,8 @@
 
 #include "graph_types.h"
 
+const GraphType GraphType::kGraphFromConsole(GraphType::GRAPH_FROM_CONSOLE);
+
 const GraphType GraphType::kGraphFromFile(GraphType::GRAPH_FROM_FILE);
 
 const GraphType GraphType::kSimpleGraph(GraphType::GRAPH_SIMPLE);

@@ -2,22 +2,6 @@ set -x
 
 source papertest/abbreviation.sh
 
-# -------------------------- testing ---------------------------
-BUILD_MARK=origin                            LAMBDA_DEBUG_FLAGS=${db}                               make build_test
-BUILD_MARK=origin-share                      LAMBDA_DEBUG_FLAGS=${db},${sh}                         make build_test
-BUILD_MARK=origin-rolling                    LAMBDA_DEBUG_FLAGS=${db},${ro}                         make build_test
-BUILD_MARK=origin-share-rolling              LAMBDA_DEBUG_FLAGS=${db},${sh},${ro}                   make build_test
-
-BUILD_MARK=sorted                            LAMBDA_DEBUG_FLAGS=${db},${so}                         make build_test
-BUILD_MARK=sorted-share                      LAMBDA_DEBUG_FLAGS=${db},${so},${sh}                   make build_test
-BUILD_MARK=sorted-rolling                    LAMBDA_DEBUG_FLAGS=${db},${so},${ro}                   make build_test
-BUILD_MARK=sorted-share-rolling              LAMBDA_DEBUG_FLAGS=${db},${so},${sh},${ro}             make build_test
-
-BUILD_MARK=coalesced                         LAMBDA_DEBUG_FLAGS=${db},${so},${co}                   make build_test
-BUILD_MARK=coalesced-share                   LAMBDA_DEBUG_FLAGS=${db},${so},${co},${sh}             make build_test
-BUILD_MARK=coalesced-rolling                 LAMBDA_DEBUG_FLAGS=${db},${so},${co},${ro}             make build_test
-BUILD_MARK=coalesced-share-rolling           LAMBDA_DEBUG_FLAGS=${db},${so},${co},${sh},${ro}       make build_test
-
 # -------------------------- shortest path ---------------------------
 BUILD_MARK=test-origin                       LAMBDA_DEBUG_FLAGS=${db}                               USER_PATH=shortest_path USER_FILE=./shortest_path/adjustable_heap.h make build
 BUILD_MARK=test-origin-share                 LAMBDA_DEBUG_FLAGS=${db},${sh}                         USER_PATH=shortest_path USER_FILE=./shortest_path/adjustable_heap.h make build

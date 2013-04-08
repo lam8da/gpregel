@@ -7,6 +7,7 @@ DELTAE=${DELTAE:-${NUMV}}
 STEP=${STEP:-1000}
 
 RUNFLAGS="\
+  --single_gpu_id=1 \
   --num_gpus=1 \
   --input_file= \
   --hash_type=mod \

@@ -28,6 +28,11 @@ void RandGenerator::GenGraph(RandomGraph *g) {
   unsigned int *end_vertex = new unsigned int[m];
   // unsigned int *weight = new unsigned int[m];
 
+  for (unsigned int i = 0; i < n; ++i) {
+    in_edge_count[i] = 0;
+    out_edge_count[i] = 0;
+  }
+
   int *stream1 = init_sprng(SPRNG_CMRG, 0, 1, SPRNG_SEED1, SPRNG_DEFAULT);
   int *stream2 = init_sprng(SPRNG_CMRG, 0, 1, SPRNG_SEED2, SPRNG_DEFAULT);
 

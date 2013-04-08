@@ -12,6 +12,7 @@
 #include <gflags/gflags.h>
 
 DECLARE_int32(num_gpus);
+DECLARE_int32(single_gpu_id);
 DECLARE_int32(max_superstep);
 DECLARE_int32(num_threads_per_block);
 DECLARE_string(input_file);

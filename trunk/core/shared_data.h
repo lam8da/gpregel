@@ -123,6 +123,7 @@ class SharedData {
 
   // IoGlobal
   IoGlobal global;
+  bool global_set;
 
   // About read/copy vcon buffer.
   unsigned int *vcon_size;

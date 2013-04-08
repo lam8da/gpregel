@@ -28,6 +28,9 @@ using std::vector;
 class Profiler {
  public:
 
+  // Not multithread-safe.
+  void Clear();
+
   void StartTimer(const string &name);
 
   void StopTimer(const string &name);

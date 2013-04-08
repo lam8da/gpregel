@@ -21,6 +21,7 @@ using std::string;
 class GraphType {
  public:
 
+  static const GraphType kGraphFromConsole;
   static const GraphType kGraphFromFile;
   static const GraphType kSimpleGraph;
   static const GraphType kRMatGraph;
@@ -33,7 +34,9 @@ class GraphType {
   }
 
   static const GraphType& GetGraphTypeFromString(const string &description) {
-    if (description == "file") {
+    if (description == "console") {
+      return kGraphFromConsole;
+    } else if (description == "file") {
       return kGraphFromFile;
     } else if (description == "simple") {
       return kSimpleGraph;
@@ -59,6 +62,8 @@ class GraphType {
 
   string GetDescriptionString() const {
     switch (type) {
+      case GRAPH_FROM_CONSOLE:
+        return "GraphFromConsole";
       case GRAPH_FROM_FILE:
         return "GraphFromFile";
       case GRAPH_SIMPLE:
@@ -77,6 +82,7 @@ class GraphType {
  private:
 
   enum GraphTypeEnum {
+    GRAPH_FROM_CONSOLE,
     GRAPH_FROM_FILE,
     GRAPH_SIMPLE,
     GRAPH_RMAT,

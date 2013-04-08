@@ -56,12 +56,8 @@ void MessageContentManager::Allocate(
      + RoundUpToMultiples(sizeof(bool), size, sizeof(unsigned int))
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
      //// TODO(laigd): add user defined members
-     + RoundUpToMultiples(sizeof(unsigned int), size, sizeof(unsigned int))
-#else
 $$M[[+ RoundUpToMultiples(sizeof(<GP_TYPE>), size, sizeof(unsigned int))]]
-#endif
      ;
 
   ALLOCATE_ON_DEVICE(unsigned int, mcon->d_space, mcon->d_space_size);
@@ -73,13 +69,8 @@ $$M[[+ RoundUpToMultiples(sizeof(<GP_TYPE>), size, sizeof(unsigned int))]]
   offset += RoundUpToMultiples(sizeof(bool), size, sizeof(unsigned int));
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  mcon->d_dist = (unsigned int*)(mcon->d_space + offset);
-  offset += RoundUpToMultiples(sizeof(unsigned int), size, sizeof(unsigned int));
-#else
 $$M[[mcon->d_<GP_NAME> = (<GP_TYPE>*)(mcon->d_space + offset); offset += RoundUpToMultiples(sizeof(<GP_TYPE>), size, sizeof(unsigned int));]]
-#endif
 
 #else  // Not share one array
 
@@ -87,12 +78,8 @@ $$M[[mcon->d_<GP_NAME> = (<GP_TYPE>*)(mcon->d_space + offset); offset += RoundUp
   ALLOCATE_ON_DEVICE(bool,         mcon->d_is_full, mcon->d_size);
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  ALLOCATE_ON_DEVICE(unsigned int, mcon->d_dist,    mcon->d_size);
-#else
 $$M[[ALLOCATE_ON_DEVICE(<GP_TYPE>, mcon->d_<GP_NAME>, mcon->d_size);]]
-#endif
 
 #endif  // LAMBDA_SHARE_ONE_MESSAGE_ARRAY
 }
@@ -108,12 +95,8 @@ void MessageContentManager::Deallocate(MessageContent *mcon) {
   DEALLOCATE_ON_DEVICE(mcon->d_is_full);
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  DEALLOCATE_ON_DEVICE(mcon->d_dist);
-#else
 $$M[[DEALLOCATE_ON_DEVICE(mcon->d_<GP_NAME>);]]
-#endif
 
 #endif
 }
@@ -126,12 +109,8 @@ void MessageContentManager::Shuffle(
   SHUFFLE_MEMBER(bool,         mcon->d_is_full, mcon->d_size, d_tmp_buf, thr_shuffle_index);
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  SHUFFLE_MEMBER(unsigned int, mcon->d_dist,    mcon->d_size, d_tmp_buf, thr_shuffle_index);
-#else
 $$M[[SHUFFLE_MEMBER(<GP_TYPE>, mcon->d_<GP_NAME>, mcon->d_size, d_tmp_buf, thr_shuffle_index);]]
-#endif
 }
 
 void MessageContentManager::Copy(
@@ -147,12 +126,8 @@ void MessageContentManager::Copy(
   COPY_FROM_DEVICE_TO_DEVICE(from, to, d_is_full, 0, 0, from.d_size, bool        );
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  COPY_FROM_DEVICE_TO_DEVICE(from, to, d_dist,    0, 0, from.d_size, unsigned int);
-#else
 $$M[[COPY_FROM_DEVICE_TO_DEVICE(from, to, d_<GP_NAME>, 0, 0, from.d_size, <GP_TYPE>);]]
-#endif
 
 #endif
 }
@@ -176,12 +151,8 @@ void MessageContentManager::DebugOutput(
   DEBUG_OUTPUT(buf, mcon.d_is_full, "is_full: ", mcon.d_size, bool);
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  DEBUG_OUTPUT(buf, mcon.d_dist,    "dist:    ", mcon.d_size, unsigned int);
-#else
 $$M[[DEBUG_OUTPUT(buf, mcon.d_<GP_NAME>, "<GP_NAME>: ", mcon.d_size, <GP_TYPE>);]]
-#endif
 
   checkCudaErrors(cudaFreeHost(buf));
 }

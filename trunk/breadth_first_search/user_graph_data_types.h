@@ -1,5 +1,5 @@
 struct Global {
-  unsigned int source;
+  unsigned int root;
 };
 
 struct Vertex {
@@ -10,5 +10,4 @@ struct Edge {
 };
 
 struct Message {
-  unsigned int level;
 };

@@ -11,11 +11,14 @@
 #include <ostream>
 #include <cmath>
 
+#include <gflags/gflags.h>
 #include "host_graph_data_types.h"
 #include "host_out_graph_data_types.h"
 #include "shared_data.h"
 #include "device_graph_data_types.h"
 #include "single_stream_writer.h"
+
+DEFINE_bool(write_test_result, false, "");
 
 using std::ostream;
 using std::endl;
@@ -52,21 +55,23 @@ void TestResultHandler(
     (*out) << "Edge result doesn't match!!" << endl;
   }
 
-  if (!vertex_result_correct || !edge_result_correct) {
-    HostOutGlobal::Write(*g, *out);
+  if (FLAGS_write_test_result) {
+    if (!vertex_result_correct || !edge_result_correct) {
+      HostOutGlobal::Write(*g, *out);
 
-    (*out) << "Vertex result from device (GPU):" << endl;
-    gpu_vout->Write(*out);
-    (*out) << "Vertex result from CPU:" << endl;
-    for (unsigned int i = 0; i < cpu_vout->size(); ++i) {
-      cpu_vout->at(i).Write(*out);
-    }
+      (*out) << "Vertex result from device (GPU):" << endl;
+      gpu_vout->Write(*out);
+      (*out) << "Vertex result from CPU:" << endl;
+      for (unsigned int i = 0; i < cpu_vout->size(); ++i) {
+        cpu_vout->at(i).Write(*out);
+      }
 
-    (*out) << "Edge result from device (GPU):" << endl;
-    gpu_eout->Write(*out);
-    (*out) << "Edge result from CPU:" << endl;
-    for (unsigned int i = 0; i < cpu_eout->size(); ++i) {
-      cpu_eout->at(i).Write(*out);
+      (*out) << "Edge result from device (GPU):" << endl;
+      gpu_eout->Write(*out);
+      (*out) << "Edge result from CPU:" << endl;
+      for (unsigned int i = 0; i < cpu_eout->size(); ++i) {
+        cpu_eout->at(i).Write(*out);
+      }
     }
   }
 }

@@ -13,17 +13,16 @@ void CpuAlgorithm(
     vector<HostGraphVertex> &vertex_vec,
     vector<HostGraphEdge> &edge_vec) {
   vector<unsigned int> queue;
-  vector<unsigned int> level_queue;
   vector<bool> vst(global.num_vertex);
+  unsigned int max_level = 0;
 
-  vertex_vec[global.source].level = 0;
-  queue.push_back(global.source);
-  level_queue.push_back(0);
-  vst[global.source] = true;
+  vertex_vec[global.root].level = 0;
+  queue.push_back(global.root);
+  vst[global.root] = true;
 
   for (unsigned int i = 0; i < queue.size(); ++i) {
     unsigned int vid = queue[i];
-    unsigned int level = level_queue[i];
+    const unsigned int level = vertex_vec[vid].level + 1;
 
     const unsigned int begin =
       (vid == 0 ? 0 : vertex_vec[vid - 1].sum_out_edge_count);
@@ -32,9 +31,9 @@ void CpuAlgorithm(
     for (unsigned int k = begin; k < end; ++k) {
       unsigned int to = edge_vec[k].to;
       if (!vst[to]) {
-        vertex_vec[to].level = level + 1;
+        if (level > max_level) max_level = level;
+        vertex_vec[to].level = level;
         queue.push_back(to);
-        level_queue.push_back(level + 1);
         vst[to] = true;
       }
     }

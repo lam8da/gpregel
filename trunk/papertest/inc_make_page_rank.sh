@@ -10,7 +10,7 @@ BUILD_MARK=origin                       LAMBDA_DEBUG_FLAGS=${pf},${st}          
 BUILD_MARK=origin-share                 LAMBDA_DEBUG_FLAGS=${pf},${st},${sh}                         USER_PATH=page_rank USER_FILE= make build
 BUILD_MARK=origin-rolling               LAMBDA_DEBUG_FLAGS=${pf},${st},${ro}                         USER_PATH=page_rank USER_FILE= make build
 # BUILD_MARK=origin-full                  LAMBDA_DEBUG_FLAGS=${pf},${st},${fu}                         USER_PATH=page_rank USER_FILE= make build
-# BUILD_MARK=origin-rolling-full          LAMBDA_DEBUG_FLAGS=${pf},${st},${ro},${fu}                   USER_PATH=page_rank USER_FILE= make build
+BUILD_MARK=origin-rolling-full          LAMBDA_DEBUG_FLAGS=${pf},${st},${ro},${fu}                   USER_PATH=page_rank USER_FILE= make build
 
 # BUILD_MARK=sorted                       LAMBDA_DEBUG_FLAGS=${pf},${st},${so}                         USER_PATH=page_rank USER_FILE= make build
 # BUILD_MARK=sorted-share                 LAMBDA_DEBUG_FLAGS=${pf},${st},${so},${sh}                   USER_PATH=page_rank USER_FILE= make build

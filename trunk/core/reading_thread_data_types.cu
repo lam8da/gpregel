@@ -14,6 +14,7 @@
 
 #include "generated_io_data_types.h"
 #include "graph_reader.h"
+#include "console_reader.h"
 #include "file_reader.h"
 #include "simple_reader.h"
 #include "rand_reader.h"
@@ -59,7 +60,9 @@ void ReadingThreadData::Init(
   conf = config;
   shared_data = shared;
 
-  if (conf->GetGraphType() == GraphType::kGraphFromFile) {
+  if (conf->GetGraphType() == GraphType::kGraphFromConsole) {
+    reader = new ConsoleReader(conf, reading_thread_id);
+  } else if (conf->GetGraphType() == GraphType::kGraphFromFile) {
     reader = new FileReader(conf, reading_thread_id);
   } else if (conf->GetGraphType() == GraphType::kSimpleGraph) {
     reader = new SimpleReader(conf, reading_thread_id);

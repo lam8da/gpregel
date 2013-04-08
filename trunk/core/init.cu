@@ -44,8 +44,8 @@ DEFINE_string(hash_type, "mod", "");
 DEFINE_string(output_file, "gpregel.out", "");
 DEFINE_string(writer_type, "single", "");
 
-// If FLAGS_graph_type != "file" (i.e. generate the graph randomly), we use the
-// following flags to control the graph.
+// If FLAGS_graph_type is not "file" or "console" (i.e. generate the graph
+// randomly), we use the following flags to control the graph.
 DEFINE_int32(rand_num_vertex, 100, "");
 DEFINE_int32(rand_num_edge, 1000, "");
 DEFINE_int32(rand_num_reading_threads, 4, "");
@@ -57,15 +57,11 @@ void StartThreadsAndWait(
     const int *available_device_id,
     GPUControlThreadData *gpu_control_thread_data,
     ReadingThreadData *reading_thread_data) {
-  SharedData shared_data(&conf);
+#ifdef LAMBDA_PROFILING
+  Singleton<Profiler>::GetInstance()->Clear();
+#endif
 
-  cout << "Starting " << conf.GetNumReadingThreads()
-       << " reading threads." << endl;
-  for (int i = 0; i < conf.GetNumReadingThreads(); ++i) {
-    reading_thread_data[i].Init(i, &conf, &shared_data);
-    // TODO(laigd): Try to directly start reading_thread_data[i].Run()?
-    cutStartThread(ReadingThread, &reading_thread_data[i]);
-  }
+  SharedData shared_data(&conf);
 
   cout << "Starting " << conf.GetNumGPUControlThreads()
        << " gpu control threads." << endl;
@@ -79,6 +75,19 @@ void StartThreadsAndWait(
       gpu_control_thread_data[i].Init(
           i, available_device_id[i], &conf, &shared_data);
       cutStartThread(GPUControlThread, &gpu_control_thread_data[i]);
+    }
+  }
+
+  cout << "Starting " << conf.GetNumReadingThreads()
+       << " reading threads." << endl;
+  if (conf.GetNumReadingThreads() == 1) {
+    reading_thread_data[0].Init(0, &conf, &shared_data);
+    reading_thread_data[0].Run();
+  } else {
+    for (int i = 0; i < conf.GetNumReadingThreads(); ++i) {
+      reading_thread_data[i].Init(i, &conf, &shared_data);
+      // TODO(laigd): Try to directly start reading_thread_data[i].Run()?
+      cutStartThread(ReadingThread, &reading_thread_data[i]);
     }
   }
 
@@ -181,6 +190,8 @@ void SetConfigByCmdFlags(Config *conf) {
     const unsigned int num_shard = CheckInputFileName(FLAGS_input_file, &input);
     conf->SetInputFile(input);
     conf->SetNumReadingThreads(num_shard);
+  } else if (conf->GetGraphType() == GraphType::kGraphFromConsole) {
+    conf->SetNumReadingThreads(1);
   } else if (conf->GetGraphType() == GraphType::kSimpleGraph) {
     conf->SetNumReadingThreads(FLAGS_rand_num_reading_threads);
   } else if (conf->GetGraphType() == GraphType::kRMatGraph

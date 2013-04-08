@@ -18,22 +18,6 @@ FLAGS="\
 rm testout
 i=0
 
-# -------------------------- testing ---------------------------
-echo "Test NO." $[++i] >> testout && ./out/test/origin/main                                 ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/origin-share/main                           ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/origin-rolling/main                         ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/origin-share-rolling/main                   ${FLAGS} >> testout
-
-echo "Test NO." $[++i] >> testout && ./out/test/sorted/main                                 ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/sorted-share/main                           ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/sorted-rolling/main                         ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/sorted-share-rolling/main                   ${FLAGS} >> testout
-
-echo "Test NO." $[++i] >> testout && ./out/test/coalesced/main                              ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/coalesced-share/main                        ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/coalesced-rolling/main                      ${FLAGS} >> testout
-echo "Test NO." $[++i] >> testout && ./out/test/coalesced-share-rolling/main                ${FLAGS} >> testout
-
 # -------------------------- shortest path ---------------------------
 echo "Test NO." $[++i] >> testout && ./out/shortest_path/test-origin/main                   ${FLAGS} >> testout
 echo "Test NO." $[++i] >> testout && ./out/shortest_path/test-origin-share/main             ${FLAGS} >> testout
