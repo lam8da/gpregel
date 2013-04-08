@@ -23,12 +23,8 @@
 void GlobalManager::Set(const IoGlobal &src, Global *dst) {
   dst->d_num_vertex = src.num_vertex;
   dst->d_num_edge = src.num_edge;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  dst->d_source = src.source;
-#else
 $$G[[dst->d_<GP_NAME> = src.<GP_NAME>;]]
-#endif
 }
 
 #ifdef LAMBDA_DEBUG
@@ -38,11 +34,7 @@ void GlobalManager::DebugOutput(const Global &global) {
       << "num_vertex: " << global.d_num_vertex << ", "
       << "num_edge: " << global.d_num_edge
       //// TODO(laigd): add user defined members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-      << ", " << "source: " << global.d_source
-#else
 $$G[[<< ", " << "<GP_NAME>: " << global.d_<GP_NAME>]]
-#endif
       << endl;
 }
 #endif

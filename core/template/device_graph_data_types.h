@@ -12,12 +12,9 @@
 struct Global {
   unsigned int d_num_vertex;
   unsigned int d_num_edge;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
+
   //// TODO(laigd): add user defined members
-  unsigned int d_source;
-#else
 $$G[[<GP_TYPE> d_<GP_NAME>;]]
-#endif
 };
 
 struct VertexContent {
@@ -28,13 +25,8 @@ struct VertexContent {
   unsigned int *d_in_edge_count;
   unsigned int *d_out_edge_count;
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  unsigned int *d_dist;
-  unsigned int *d_pre;
-#else
 $$V[[<GP_TYPE> *d_<GP_NAME>;]]
-#endif
 };
 
 struct EdgeContent {
@@ -45,12 +37,8 @@ struct EdgeContent {
   unsigned int *d_from;
   unsigned int *d_to;
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  unsigned int *d_weight;
-#else
 $$E[[<GP_TYPE> *d_<GP_NAME>;]]
-#endif
 };
 
 struct MessageContent {
@@ -65,12 +53,8 @@ struct MessageContent {
   bool *d_is_full;
 #endif
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members
-  unsigned int *d_dist;
-#else
 $$M[[<GP_TYPE> *d_<GP_NAME>;]]
-#endif
 };
 
 struct AuxiliaryDeviceData {

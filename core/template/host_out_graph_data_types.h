@@ -47,11 +47,7 @@ class HostOutGlobal {
     out << "num_vertex: " << g.d_num_vertex << ", "
         << "num_edge: " << g.d_num_edge
         //// TODO(laigd): add user defined members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-        << ", " << "source: " << g.d_source
-#else
 $$G[[<< ", " << "<GP_NAME>: " << g.d_<GP_NAME>]]
-#endif
         << endl;
   }
 };
@@ -61,26 +57,16 @@ class HostOutVertexContent {
 
   // Members we need to copy.
   unsigned int *id;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined 'out' members
-  unsigned int *dist;
-  unsigned int *pre;
-#else
 $$V_OUT[[<GP_TYPE> *<GP_NAME>;]]
-#endif
 
   HostOutVertexContent()
       : capacity(0),
         size(0),
         // Members we need to copy from device.
         id(NULL)
-#ifdef LAMBDA_TEST_SHORTEST_PATH
         //// TODO(laigd): add user defined 'out' members
-        , dist(NULL)
-        , pre(NULL)
-#else
 $$V_OUT[[, <GP_NAME>(NULL)]]
-#endif
   {
   }
 
@@ -99,13 +85,8 @@ $$V_OUT[[, <GP_NAME>(NULL)]]
     size = 0;
 
     ALLOCATE_OUT_MEMBERS(unsigned int, id, capacity);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'out' members
-    ALLOCATE_OUT_MEMBERS(unsigned int, dist, capacity);
-    ALLOCATE_OUT_MEMBERS(unsigned int, pre, capacity);
-#else
 $$V_OUT[[ALLOCATE_OUT_MEMBERS(<GP_TYPE>, <GP_NAME>, capacity);]]
-#endif
   }
 
   // Only deallocate 'out' members
@@ -119,13 +100,8 @@ $$V_OUT[[ALLOCATE_OUT_MEMBERS(<GP_TYPE>, <GP_NAME>, capacity);]]
     size = 0;
 
     DEALLOCATE_ON_HOST(id);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'out' members
-    DEALLOCATE_ON_HOST(dist);
-    DEALLOCATE_ON_HOST(pre);
-#else
 $$V_OUT[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
-#endif
   }
 
   void CopyFromDevice(
@@ -142,13 +118,8 @@ $$V_OUT[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
     }
 
     COPY_FROM_DEVICE_TO_HOST(id, size, src, device_offset, copy_size, unsigned int);
-#ifdef LAMBDA_TEST_SHORTEST_PATH
     //// TODO(laigd): add user defined 'out' members
-    COPY_FROM_DEVICE_TO_HOST(dist, size, src, device_offset, copy_size, unsigned int);
-    COPY_FROM_DEVICE_TO_HOST(pre,  size, src, device_offset, copy_size, unsigned int);
-#else
 $$V_OUT[[COPY_FROM_DEVICE_TO_HOST(<GP_NAME>, size, src, device_offset, copy_size, <GP_TYPE>);]]
-#endif
 
     size += copy_size;
   }
@@ -177,35 +148,20 @@ $$V_OUT[[COPY_FROM_DEVICE_TO_HOST(<GP_NAME>, size, src, device_offset, copy_size
     for (unsigned int i = 0; i < size; ++i) {
       if (sort_map[i] != -1) {
         unsigned int tmp_id = id[i];
-#ifdef LAMBDA_TEST_SHORTEST_PATH
         //// TODO(laigd): Add user defined 'out' members.
-        unsigned int tmp_dist = dist[i];
-        unsigned int tmp_pre = pre[i];
-#else
 $$V_OUT[[<GP_TYPE> tmp_<GP_NAME> = <GP_NAME>[i];]]
-#endif
         unsigned int q = i, p = sort_map[i];
         while (p != i) {
           id[q] = id[p];
-#ifdef LAMBDA_TEST_SHORTEST_PATH
           //// TODO(laigd): Add user defined 'out' members.
-          dist[q] = dist[p];
-          pre[q] = pre[p];
-#else
 $$V_OUT[[<GP_NAME>[q] = <GP_NAME>[p];]]
-#endif
           sort_map[q] = -1;
           q = p;
           p = sort_map[p];
         }
         id[q] = tmp_id;
-#ifdef LAMBDA_TEST_SHORTEST_PATH
         //// TODO(laigd): Add user defined 'out' members.
-        dist[q] = tmp_dist;
-        pre[q] = tmp_pre;
-#else
 $$V_OUT[[<GP_NAME>[q] = tmp_<GP_NAME>;]]
-#endif
         sort_map[q] = -1;
       }
     }
@@ -215,13 +171,8 @@ $$V_OUT[[<GP_NAME>[q] = tmp_<GP_NAME>;]]
   void Write(ostream &out) {
     for (unsigned int i = 0; i < size; ++i) {
       out << id[i]
-#ifdef LAMBDA_TEST_SHORTEST_PATH
           //// TODO(laigd): Add user defined 'out' members.
-          << ", " << dist[i]
-          << ", " << pre[i]
-#else
 $$V_OUT[[<< ", " << <GP_NAME>[i]]]
-#endif
           << endl;
     }
   }
@@ -255,10 +206,7 @@ struct HostOutEdgeContent {
   unsigned int *from;
   unsigned int *to;
   //// TODO(laigd): add user defined 'out' members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[<GP_TYPE> *<GP_NAME>;]]
-#endif
 
   HostOutEdgeContent()
       : capacity(0),
@@ -267,10 +215,7 @@ $$E_OUT[[<GP_TYPE> *<GP_NAME>;]]
         from(NULL),
         to(NULL)
         //// TODO(laigd): add user defined 'out' members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[, <GP_NAME>(NULL)]]
-#endif
   {
   }
 
@@ -291,10 +236,7 @@ $$E_OUT[[, <GP_NAME>(NULL)]]
     ALLOCATE_OUT_MEMBERS(unsigned int, from, capacity);
     ALLOCATE_OUT_MEMBERS(unsigned int, to, capacity);
     //// TODO(laigd): add user defined 'out' members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[ALLOCATE_OUT_MEMBERS(<GP_TYPE>, <GP_NAME>, capacity);]]
-#endif
   }
 
   // Only deallocate 'out' members
@@ -310,10 +252,7 @@ $$E_OUT[[ALLOCATE_OUT_MEMBERS(<GP_TYPE>, <GP_NAME>, capacity);]]
     DEALLOCATE_ON_HOST(from);
     DEALLOCATE_ON_HOST(to);
     //// TODO(laigd): add user defined 'out' members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
-#endif
   }
 
   void CopyFromDevice(
@@ -332,10 +271,7 @@ $$E_OUT[[DEALLOCATE_ON_HOST(<GP_NAME>);]]
     COPY_FROM_DEVICE_TO_HOST(from, size, src, device_offset, copy_size, unsigned int);
     COPY_FROM_DEVICE_TO_HOST(to,   size, src, device_offset, copy_size, unsigned int);
     //// TODO(laigd): add user defined 'out' members
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[COPY_FROM_DEVICE_TO_HOST(<GP_NAME>, size, src, device_offset, copy_size, <GP_TYPE>);]]
-#endif
 
     size += copy_size;
   }
@@ -366,19 +302,13 @@ $$E_OUT[[COPY_FROM_DEVICE_TO_HOST(<GP_NAME>, size, src, device_offset, copy_size
         unsigned int tmp_from = from[i];
         unsigned int tmp_to = to[i];
         //// TODO(laigd): Add user defined 'out' members.
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[<GP_TYPE> tmp_<GP_NAME> = <GP_NAME>[i];]]
-#endif
         unsigned int q = i, p = sort_map[i];
         while (p != i) {
           from[q] = from[p];
           to[q] = to[p];
           //// TODO(laigd): Add user defined 'out' members.
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[<GP_NAME>[q] = <GP_NAME>[p];]]
-#endif
           sort_map[q] = -1;
           q = p;
           p = sort_map[p];
@@ -386,10 +316,7 @@ $$E_OUT[[<GP_NAME>[q] = <GP_NAME>[p];]]
         from[q] = tmp_from;
         to[q] = tmp_to;
         //// TODO(laigd): Add user defined 'out' members.
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[<GP_NAME>[q] = tmp_<GP_NAME>;]]
-#endif
         sort_map[q] = -1;
       }
     }
@@ -400,10 +327,7 @@ $$E_OUT[[<GP_NAME>[q] = tmp_<GP_NAME>;]]
     for (unsigned int i = 0; i < size; ++i) {
       out << from[i] << ", " << to[i]
           //// TODO(laigd): Add user defined 'out' members.
-#ifdef LAMBDA_TEST_SHORTEST_PATH
-#else
 $$E_OUT[[<< ", " << <GP_NAME>[i]]]
-#endif
           << endl;
     }
   }

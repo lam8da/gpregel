@@ -11,9 +11,12 @@
 
 #include <iostream>
 
+#include <gflags/gflags.h>
 #include "device_graph_data_types.h"
 #include "shared_data.h"
 #include "single_stream_writer.h"
+
+DECLARE_bool(write_test_result);
 
 using std::cout;
 

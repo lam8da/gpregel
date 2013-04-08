@@ -26,6 +26,11 @@ using std::string;
 using std::vector;
 using std::list;
 
+void Profiler::Clear() {
+  timer_map.clear();
+  timer_list.clear();
+}
+
 void Profiler::StartTimer(const string &name) {
   pthread_mutex_lock(&map_mutex);
 

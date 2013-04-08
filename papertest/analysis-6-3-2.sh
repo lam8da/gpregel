@@ -1,47 +1,30 @@
-BLOCK_SIZE=128
-
-function GetAverageTime() {
-count=0;
-total=0;
-
-for i in papertest/testout-6-3-2/${ALGO}-${SCHEME}-${GRAPH}*; do
-  step=$(sed -n '22p' $i | sed 's/^.*://');
-  time=$(sed -n '28p' $i | sed 's/^.*://;s/ms *//');
-
-  if [ -n "${time}" ]; then
-    total=$(echo "${total}+${time}" | bc);
-    count=$[count+1];
-    # echo ${time} ${total} ${count}
-  fi
-done
-
-echo $(echo "scale=3;${total}/${count}" | bc);
-}
+source ./papertest/helper_script.sh
 
 function GetByGraph() {
-SCHEME=origin
-t1=`GetAverageTime`
+FILES="papertest/testout-6-3-2/${ALGO}-origin-${GRAPH}*"
+t1=`GetAverageTimeByLine`
 
-SCHEME=sorted
-t2=`GetAverageTime`
+FILES="papertest/testout-6-3-2/${ALGO}-sorted-${GRAPH}*"
+t2=`GetAverageTimeByLine`
 
-echo "   ---   origin: " ${t1} "     sorted: " ${t2}
+printf "%-9s --- origin: %9.3f, sorted: %9.3f\n" ${GRAPH} ${t1} ${t2}
 }
 
 function GetByAlgo() {
 echo -------------- ${ALGO} --------------
+LINE="31p"
 
 GRAPH=rmat
-echo "rmat     " `GetByGraph`
+GetByGraph
 
 GRAPH=rand
-echo "rand     " `GetByGraph`
+GetByGraph
 
 GRAPH=wikitalk
-echo "wikitalk " `GetByGraph`
+GetByGraph
 
 GRAPH=roadnetca
-echo "roadnetca" `GetByGraph`
+GetByGraph
 
 echo ''
 }
@@ -55,7 +38,8 @@ GetByAlgo
 ALGO=page_rank
 GetByAlgo
 
-GRAPH=''
+GRAPH='bip'
 ALGO=bipartite_matching
 echo -------------- ${ALGO} --------------
-echo "bip      " `GetByGraph`
+LINE="32p"
+GetByGraph

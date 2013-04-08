@@ -42,6 +42,7 @@ SharedData::SharedData(const Config *config)
       superstep_end_barrier(),
       // Global
       global(),
+      global_set(false),
       // vcon related
       vcon_size(NULL),
       vcon_buf(NULL),
@@ -242,14 +243,13 @@ void SharedData::WaitForSuperStepFinished() {
 }
 
 void SharedData::SetGlobalOnce(const IoGlobal &g) {
-  static bool is_set = false;
   pthread_mutex_lock(&host_graph_mutex);
-  if (!is_set) {
+  if (!global_set) {
     global = g;
     host_graph.SetGlobal(global);
-    is_set = true;
+    global_set = true;
   } else {
-    cout << "SharedData::SetGlobalOnce error: already set before!" << endl;
+    cerr << "SharedData::SetGlobalOnce error: already set before!" << endl;
     exit(1);
   }
   pthread_mutex_unlock(&host_graph_mutex);

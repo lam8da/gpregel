@@ -29,15 +29,9 @@ struct Edge {
   }
 
   /************************ user defined members' get/set *********************/
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members' GET/SET
-  __device__ unsigned int get_weight() const {
-    return d_econ.d_weight[index];
-  }
-#else
 $$E[[__device__ <GP_TYPE> get_<GP_NAME>() const { return d_econ.d_<GP_NAME>[index]; }]]
 $$E_OUT[[__device__ void set_<GP_NAME>(const <GP_TYPE> &value) { d_econ.d_<GP_NAME>[index] = value; }]]
-#endif
 };
 
 // Out message.
@@ -61,14 +55,8 @@ struct Message {
   }
 
   /************************ user defined members' set *************************/
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members' SET
-  __device__ void set_dist(const unsigned int &value) {
-    d_mcon_send.d_dist[index] = value;
-  }
-#else
 $$M[[__device__ void set_<GP_NAME>(const <GP_TYPE> &value) { d_mcon_send.d_<GP_NAME>[index] = value; }]]
-#endif
 };
 
 struct OutEdgeIterator {
@@ -197,14 +185,8 @@ struct MessageIterator {
   }
 
   /************************ user defined members' get *************************/
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members' GET
-  __device__ unsigned int get_dist() const {
-    return d_mcon_recv.d_dist[mcon_recv_idx];
-  }
-#else
 $$M[[__device__ <GP_TYPE> get_<GP_NAME>() const { return d_mcon_recv.d_<GP_NAME>[mcon_recv_idx]; }]]
-#endif
 };
 
 struct Vertex {
@@ -241,14 +223,8 @@ struct Vertex {
     return d_global.d_num_edge;
   }
 
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members' GET
-  __device__ unsigned int get_source() const {
-    return d_global.d_source;
-  }
-#else
 $$G[[__device__ <GP_TYPE> get_<GP_NAME>() const { return d_global.d_<GP_NAME>; }]]
-#endif
 
   /*************************** system members' get/set ************************/
   __device__ unsigned int get_id() const {
@@ -272,27 +248,9 @@ $$G[[__device__ <GP_TYPE> get_<GP_NAME>() const { return d_global.d_<GP_NAME>; }
   }
 
   /************************ user defined members' get/set *********************/
-#ifdef LAMBDA_TEST_SHORTEST_PATH
   //// TODO(laigd): add user defined members' GET/SET
-  __device__ unsigned int get_dist() const {
-    return d_vcon.d_dist[index];
-  }
-
-  __device__ void set_dist(const unsigned int &dist) {
-    d_vcon.d_dist[index] = dist;
-  }
-
-  __device__ unsigned int get_pre() const {
-    return d_vcon.d_pre[index];
-  }
-
-  __device__ void set_pre(const unsigned int &pre) {
-    d_vcon.d_pre[index] = pre;
-  }
-#else
 $$V[[__device__ <GP_TYPE> get_<GP_NAME>() const { return d_vcon.d_<GP_NAME>[index]; }]]
 $$V_OUT[[__device__ void set_<GP_NAME>(const <GP_TYPE> &value) { d_vcon.d_<GP_NAME>[index] = value; }]]
-#endif
 };
 
 #endif

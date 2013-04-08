@@ -1,12 +1,13 @@
 set -x
 
 GRAPH=${GRAPH:-rmat}
-NUMV=${NUMV:-50000}
-MAXE=${MAXE:-150000}
-DELTAE=${DELTAE:-10000}
-STEP=${STEP:-1000}
+NUMV=${NUMV:-1000000}
+MAXE=${MAXE:-16000000}
+DELTAE=${DELTAE:-1000000}
+STEP=${STEP:-30}
 
 RUNFLAGS="\
+  --single_gpu_id=1 \
   --num_gpus=1 \
   --input_file= \
   --hash_type=mod \
@@ -30,5 +31,6 @@ mkdir ${OUTPUT_DIR}
 for ((NUME=${NUMV}; NUME<=${MAXE}; NUME=NUME+${DELTAE}));
 do
   ./out/page_rank/origin-rolling/main         ${RUNFLAGS} --rand_num_edge=${NUME} > ${OUTPUT_DIR}/origin-rolling-${GRAPH}-${NUMV}-${NUME}-${STEP}
+  ./out/page_rank/origin-rolling-full/main    ${RUNFLAGS} --rand_num_edge=${NUME} > ${OUTPUT_DIR}/origin-rolling-full-${GRAPH}-${NUMV}-${NUME}-${STEP}
   ./out/page_rank/coalesced-rolling-full/main ${RUNFLAGS} --rand_num_edge=${NUME} > ${OUTPUT_DIR}/coalesced-rolling-full-${GRAPH}-${NUMV}-${NUME}-${STEP}
 done
